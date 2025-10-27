@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/globals.css";
+import "./globals.css";
 import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from "@/lib/constantes";
+import { ThemeProvider } from "next-themes";
 
 const interfont = Inter({
   variable: "--font-inter-sans",
@@ -20,11 +21,18 @@ export default function MainRootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${interfont.className} antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute={"class"}
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

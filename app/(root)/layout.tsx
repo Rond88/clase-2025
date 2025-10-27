@@ -1,6 +1,7 @@
+import Footer from "@/components/footer";
+import Header from "@/components/shared/header";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 
 const interfont = Inter({
   variable: "--font-inter-sans",
@@ -18,8 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex-1 h-screen flex-col">
+    <div className="flex h-screen flex-col ">
+      <Header />
         {children}
+        <Footer />
     </div>
       
   );
