@@ -9,8 +9,10 @@ export default function ProductList({data, title, limit}:
 }) {
     const limitedData = limit ? data.slice(0, limit) : data;
   return (
-    <div>
-      
+    <div className='my-10'>
+      <h2>
+        
+      </h2>
     </div>
   )
 }
