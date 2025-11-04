@@ -22,14 +22,20 @@ export default function MainRootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${interfont.className} antialiased`}
-      >
+      <body className={`${interfont.className} antialiased`}>
         <ThemeProvider
           attribute={"class"}
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
+          /* temas */
+          value={{
+            light: "light",
+            dark: "dark",
+            light2: "light2",
+            dark2: "dark2",
+            cafe: "cafe",
+          }}
         >
           {children}
         </ThemeProvider>
