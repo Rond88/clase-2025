@@ -1,3 +1,4 @@
+import { Prisma } from "@/lib/generated/prisma/client";
 export type Product = {
     id?: string;
     name: string;
