@@ -5,6 +5,7 @@ import { Product } from '@/types/Product';
 
 export default async function HomePage() {
   const data= await getALatestProducts() as unknown as Product[];
+  console.log("HomePage fetched products:", data);
   return (
     <div className='wrapper'>
       <ProductList data={data} title='Mi lista' limit={4} />

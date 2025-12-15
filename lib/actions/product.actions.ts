@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db/prisma";
+import { convertToPlainObject } from "../utils";
 
 
 
@@ -10,6 +11,7 @@ export async function getALatestProducts() {
             createdAt: 'desc'
         }
     })   
+    return convertToPlainObject(data);
 }
 
 export async function getProductBySlug(slug: string) {
