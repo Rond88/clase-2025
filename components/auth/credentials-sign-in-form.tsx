@@ -11,17 +11,16 @@ export default function CredentialsSignUpForm() {
   async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const formData = new FormData(evt.currentTarget);
-    const name = String(formData.get("name"));
     const email = String(formData.get("email"));
     const password = String(formData.get("password"));
     // comprobación de los campos del formulario
-    if(!name || !email || !password) return;
+    if(!email || !password) return;
 
-    await authClient.signUp.email(
+    await authClient.signIn.email(
       {
-        name,
         email,
-        password
+        password,
+        callbackURL: "/profile"
       },
       {
         onRequest:() => {},
@@ -36,10 +35,6 @@ export default function CredentialsSignUpForm() {
     <form onSubmit={handleSubmit}>
       <div className='space-y-6'>
         <div>
-            <Label htmlFor='name'>Name</Label>
-            <Input id='name' name='name' type='text' defaultValue={signUpDefaultValues.name} required></Input>
-        </div>
-        <div>
             <Label htmlFor='email'>Email</Label>
             <Input id='email' name='email' type='email' defaultValue={signUpDefaultValues.email} required></Input>
         </div>
@@ -48,7 +43,7 @@ export default function CredentialsSignUpForm() {
             <Input id='password' name='password' type='password' defaultValue={signUpDefaultValues.password} required></Input>
         </div>
         <div>
-            <Button className='w-full' type='submit'>Sign Up</Button>
+            <Button className='w-full' type='submit'>Sign In</Button>
         </div>
       </div>
     </form>
