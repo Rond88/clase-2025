@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Product" ALTER COLUMN "price" SET DATA TYPE DECIMAL,
+ALTER COLUMN "rating" SET DATA TYPE DECIMAL;
+
+-- AlterTable
+ALTER TABLE "user" ADD COLUMN     "phone" TEXT;
