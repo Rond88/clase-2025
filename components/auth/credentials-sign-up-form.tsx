@@ -1,3 +1,4 @@
+
 "use client";
 import { Label } from "@radix-ui/react-label";
 import React from "react";
@@ -7,7 +8,7 @@ import { signUpDefaultValues } from "@/lib/constantes";
 import { authClient } from "@/lib/auth-client";
 
 export default function CredentialsSignUpForm() {
-  async function handleSumbit(evt:React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const formData = new FormData(evt.currentTarget);
     const name = String(formData.get("name"));
@@ -15,24 +16,38 @@ export default function CredentialsSignUpForm() {
     const password = String(formData.get("password"));
     const phone = String(formData.get("phone"));
     //Comprobaciones de los campos del formulario
-    if(!name || !password || !email) return;
-    console.log("Registro")
-    await authClient.signUp.email(
-      {
-        email,
-        password,
-        name
-      },
-      {
-        onRequest: () => {},
-        onResponse: () => {},
-        onError: (ctx) => { console.log(ctx.error.message)},
-        onSuccess: () => { console.log("Registro correcto")},
-      }
-    );
+    if (!name || !password || !email) {
+      console.log("Faltan campos obligatorios");
+      return;
+    }
+
+    console.log("Registro");
+    try {
+      await authClient.signUp.email(
+        {
+          email,
+          password,
+          name,
+          // enviar phone si viene (es optional en el auth)
+          ...(phone ? { phone } : {}),
+        },
+        {
+          onRequest: () => {},
+          onResponse: () => {},
+          onError: (ctx) => {
+            console.log("Sign up error:", ctx?.error?.message ?? ctx);
+          },
+          onSuccess: () => {
+            console.log("Registro correcto");
+          },
+        },
+      );
+    } catch (err) {
+      console.error("Error inesperado al registrarse:", err);
+    }
   }
   return (
-    <form onSubmit={handleSumbit}>
+    <form onSubmit={handleSubmit}>
       <div className="space-y-6">
         <div>
           <Label htmlFor="name">Name</Label>
@@ -55,13 +70,15 @@ export default function CredentialsSignUpForm() {
           />
         </div>
         <div>
-          <Label htmlFor="phone">Phone <span className="text-muted-foreground">(Optional)</span></Label>
+          <Label htmlFor="phone">
+            Phone <span className="text-muted-foreground">(Optional)</span>
+          </Label>
           <Input
             id="phone"
             name="phone"
             type="text"
             defaultValue={signUpDefaultValues.phone}
-            required
+            // optional: no debe ser required
           />
         </div>
         <div>
@@ -69,13 +86,15 @@ export default function CredentialsSignUpForm() {
           <Input
             id="password"
             name="password"
-            type="text"
+            type="password"
             defaultValue={signUpDefaultValues.password}
             required
           />
         </div>
         <div>
-          <Button className="w-full" type="submit">Sign Up</Button>
+          <Button className="w-full" type="submit">
+            Sign Up
+          </Button>
         </div>
       </div>
     </form>

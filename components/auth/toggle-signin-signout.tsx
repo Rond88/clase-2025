@@ -3,16 +3,15 @@ import React from "react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Link, User } from "lucide-react";
+import { User } from "lucide-react";
+import Link from "next/link";
 
 export default function ToggleSignInSignOut() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
-    if (isPending) {
-        return (
-            <Button variant={"outline"}>Loading...</Button>
-        )
-    }
+  if (isPending) {
+    return <Button variant={"outline"}>Loading...</Button>;
+  }
   if (session) {
     return (
       <Button
