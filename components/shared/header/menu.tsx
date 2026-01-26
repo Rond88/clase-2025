@@ -8,6 +8,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet'
+import ToggleSignInSignOut from '@/components/auth/toggle-signin-signout'
 
 export default function MenuHeader() {
   return (
@@ -19,11 +20,7 @@ export default function MenuHeader() {
                     <ShoppingCart/>Cart
                 </Link>
             </Button>
-            <Button asChild variant={"ghost"}>
-                <Link href="/sign-in">
-                    <User/>Sign-in
-                </Link>
-            </Button>
+            <ToggleSignInSignOut></ToggleSignInSignOut>
         </nav>
         <nav className='md:hidden'>
             <Sheet>
@@ -38,11 +35,7 @@ export default function MenuHeader() {
                             <ShoppingCart/>Cart
                         </Link>
                     </Button>
-                    <Button asChild variant={"ghost"}>
-                        <Link href="/sign-in">
-                            <User/>Sign-in
-                        </Link>
-                    </Button>
+                    <ToggleSignInSignOut></ToggleSignInSignOut>
                 </SheetContent>
             </Sheet>
         </nav>

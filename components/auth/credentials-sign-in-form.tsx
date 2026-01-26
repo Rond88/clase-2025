@@ -6,27 +6,35 @@ import { Button } from "../ui/button";
 import { signUpDefaultValues } from "@/lib/constantes";
 import { authClient } from "@/lib/auth-client";
 
-export default function CredentialsSignInForm() {
-  async function handleSumbit(evt:React.FormEvent<HTMLFormElement>) {
+export default function CredentialsSignInForm({
+  callbackUrl = "/profile",
+}: {
+  callbackUrl: string;
+}) {
+  async function handleSumbit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const formData = new FormData(evt.currentTarget);
     const email = String(formData.get("email"));
     const password = String(formData.get("password"));
     //Comprobaciones de los campos del formulario
-    if(!password || !email) return;
+    if (!password || !email) return;
 
     await authClient.signIn.email(
       {
         email,
         password,
-        callbackURL: "/profile",
+        callbackURL: callbackUrl,
       },
       {
         onRequest: () => {},
         onResponse: () => {},
-        onError: (ctx) => { console.log(ctx.error.message)},
-        onSuccess: () => { console.log("Login correcto")},
-      }
+        onError: (ctx) => {
+          console.log(ctx.error.message);
+        },
+        onSuccess: () => {
+          console.log("Login correcto");
+        },
+      },
     );
   }
   return (
@@ -53,7 +61,9 @@ export default function CredentialsSignInForm() {
           />
         </div>
         <div>
-          <Button className="w-full" type="submit">Sign In</Button>
+          <Button className="w-full" type="submit">
+            Sign In
+          </Button>
         </div>
       </div>
     </form>
