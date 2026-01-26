@@ -11,7 +11,7 @@ export default function ProductImages({ images }: { images: string[] }) {
 
   return (
     <div>
-      {/* Main image */}
+      {/* Imagen principal */}
       <div className="mb-4">
         <Image
           src={images[selected]}
@@ -31,14 +31,14 @@ export default function ProductImages({ images }: { images: string[] }) {
             onClick={() => setSelected(index)}
             aria-pressed={selected === index}
             className={`rounded-md overflow-hidden border-2 focus:outline-none ${
-              selected === index ? "border-primary" : "border-transparent"
+              selected === index ? "border-amber-500" : "border-transparent"
             }`}
           >
             <Image
               src={image}
-              alt={`Thumbnail ${index}`}
-              width={100}
-              height={100}
+              alt={`Secundaria ${index}`}
+              width={200}
+              height={200}
               className={`object-cover object-center ${selected === index ? "opacity-100" : "opacity-70 hover:opacity-100"}`}
             />
           </button>
