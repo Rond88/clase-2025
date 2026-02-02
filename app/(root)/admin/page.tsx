@@ -8,7 +8,7 @@ import { getProductsTable } from "@/lib/actions/product.actions";
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: { searchParams: Promise<{ [key: string]: string | string[] }> };
+  searchParams: Promise<{ [key: string]: string | string[] }>;
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -24,7 +24,11 @@ export default async function AdminPage({
   return (
     <>
       <div>Admin Page</div>
-      <ProductTable products={data} page={page} pageSize={pageSize}></ProductTable>
+      <ProductTable
+        products={data}
+        page={page}
+        pageSize={pageSize}
+      ></ProductTable>
       <SignOutButton></SignOutButton>
     </>
   );
