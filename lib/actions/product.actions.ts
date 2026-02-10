@@ -30,7 +30,7 @@ export async function getProductsTable({
     ]);
     const totalPages = Math.ceil(totalCount / pageSize);
     return{
-        data: convertToPlainObject(data) as unknown as Product[-],
+        data: convertToPlainObject(data) as unknown as Product[],
         pageInfo: {totalCount, totalPages, currentPage: page},
     }
 }

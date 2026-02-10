@@ -1,18 +1,69 @@
-import React from 'react'
-import { Product } from '@/types/Product'
-import { Table, TableCaption, TableBody, TableCell, TableRow, TableHeader  } from '@/components/ui/table'
+import React from "react";
+import { Product } from "@/types/Product";
+import {
+  Table,
+  TableCaption,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
+  TableHead,
+} from "@/components/ui/table";
+import { Button } from "../ui/button";
+import { Link, Pencil, Trash } from "lucide-react";
 
-export default function ProductTable({products, totalPages=1, currentPage=1, pageSize=2}:
-  {
-    products: Product[],
-    totalPages?: number,
-    currentPage?: number,
-    pageSize?: number,
-  }
-) {
+export default function ProductTable({
+  products,
+  totalPages = 1,
+  currentPage = 1,
+  pageSize = 2,
+}: {
+  products: Product[];
+  totalPages?: number;
+  currentPage?: number;
+  pageSize?: number;
+}) {
   return (
-    <div>
-      
-    </div>
-  )
+    <>
+      <Table>
+        <TableCaption>List of Products</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Slug</TableHead>
+            <TableHead>Quantity</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {products.map((product) => (
+            <TableRow key={product.id}>
+              <TableCell>{product.name}</TableCell>
+              <TableCell>{product.price}</TableCell>
+              <TableCell>{product.slug}</TableCell>
+              <TableCell>{product.stock}</TableCell>
+              <TableCell>
+                <Button variant={"outline"} asChild>
+                  <Link href={`/admin/products/${product.id}`}>
+                    <Pencil />
+                  </Link>
+                </Button>
+
+                <Button
+                  variant={"outline"}
+                  className="text-destructive"
+                  asChild
+                >
+                  <Link href={`/admin/products/${product.id}`}>
+                    <Trash />
+                  </Link>
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
+  );
 }

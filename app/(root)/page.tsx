@@ -1,10 +1,10 @@
 import React from 'react'
 import ProductList from '@/components/shared/product/product-list'
-import { getALatestProducts } from '@/lib/actions/product.actions'
+import { getLatestProducts } from '@/lib/actions/product.actions'
 import { Product } from '@/types/Product';
 
 export default async function HomePage() {
-  const data= await getALatestProducts() as unknown as Product[];
+  const data= await getLatestProducts() as unknown as Product[];
   console.log("HomePage fetched products:", data);
   return (
     <div className='wrapper'>
