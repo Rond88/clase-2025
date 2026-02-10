@@ -17,7 +17,7 @@ export default async function AdminPage({
     return <div>No autorizado</div>;
   }
   const { page = 1, pageSize = 2 } = await searchParams;
-  const products = await getProductsTable({
+  const {data, pageInfo} = await getProductsTable({
     page: Number(page),
     pageSize: Number(pageSize),
   });
@@ -26,8 +26,8 @@ export default async function AdminPage({
       <div>Admin Page</div>
       <ProductTable
         products={data}
-        page={page}
-        pageSize={pageSize}
+        currentPage={pageInfo.currentPage}
+        totalPages={pageInfo.totalPages}
       ></ProductTable>
       <SignOutButton></SignOutButton>
     </>

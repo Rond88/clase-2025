@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Product } from "@/types/Product";
 import {
   Table,
@@ -10,7 +11,7 @@ import {
   TableHead,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { Link, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import ProductTablePagination from "./product-table-pagination";
 
 export default function ProductTable({
