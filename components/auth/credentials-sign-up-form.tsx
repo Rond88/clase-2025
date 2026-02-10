@@ -1,13 +1,16 @@
 "use client";
 import { Label } from "@radix-ui/react-label";
 import React, { useState } from "react";
+import Link from "next/link";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { signUpDefaultValues } from "@/lib/constantes";
 import { authClient } from "@/lib/auth-client";
 
 export default function CredentialsSignUpForm() {
   const [error, setError] = useState("");
+  const [communicationMethod, setCommunicationMethod] = useState("");
 
   async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
@@ -38,6 +41,13 @@ export default function CredentialsSignUpForm() {
       return;
     }
 
+    // Validación condicional del teléfono según método de comunicación
+    if (communicationMethod === "phone" && !phone) {
+      console.log("El teléfono es requerido cuando se selecciona comunicación por teléfono");
+      setError("Phone number is required when selecting phone communication");
+      return;
+    }
+
     console.log("Registro");
     try {
       await authClient.signUp.email(
@@ -47,6 +57,7 @@ export default function CredentialsSignUpForm() {
           name,
           // enviar phone si viene (es optional en el auth)
           ...(phone ? { phone } : {}),
+          comms: communicationMethod || undefined,
         },
         {
           onRequest: () => {},
@@ -133,17 +144,38 @@ export default function CredentialsSignUpForm() {
           </Label>
         </div>
         {/* Método de recibir comunicaciones */}
-        <div>
-          <Label htmlFor="communications">How do you want to receive communications?</Label>
-          
+        <div className="space-y-3">
+          <Label>How do you want to receive communications?</Label>
+          <RadioGroup 
+            value={communicationMethod} 
+            onValueChange={setCommunicationMethod}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="mail" id="mail" />
+              <Label htmlFor="mail" className="font-normal cursor-pointer">Mail</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="phone" id="phone" />
+              <Label htmlFor="phone" className="font-normal cursor-pointer">Phone</Label>
+            </div>
+          </RadioGroup>
         </div>
+
         <div>
           <Button className="w-full" type="submit">
             Sign Up
           </Button>
         </div>
 
-        {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+        {error && <p className="text-destructive text-sm font-medium">{error}</p>}
+        
+        <div className="text-center text-sm text-muted-foreground">
+          Already have an account?{" "}
+          <Link href="/sign-in" className="underline underline-offset-4 hover:text-primary">
+            Sign in
+          </Link>
+        </div>
       </div>
     </form>
   );
