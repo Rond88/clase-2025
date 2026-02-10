@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
 import { Link, Pencil, Trash } from "lucide-react";
+import ProductTablePagination from "./product-table-pagination";
 
 export default function ProductTable({
   products,
@@ -64,6 +65,7 @@ export default function ProductTable({
           ))}
         </TableBody>
       </Table>
+      <ProductTablePagination currentPage={currentPage} totalPages={totalPages} />
     </>
   );
 }
