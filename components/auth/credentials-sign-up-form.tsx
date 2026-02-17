@@ -2,15 +2,19 @@
 import { Label } from "@radix-ui/react-label";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { signUpDefaultValues } from "@/lib/constantes";
 import { authClient } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
 
 export default function CredentialsSignUpForm() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [communicationMethod, setCommunicationMethod] = useState("");
+  const router = useRouter();
 
   async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
@@ -43,12 +47,15 @@ export default function CredentialsSignUpForm() {
 
     // Validación condicional del teléfono según método de comunicación
     if (communicationMethod === "phone" && !phone) {
-      console.log("El teléfono es requerido cuando se selecciona comunicación por teléfono");
+      console.log(
+        "El teléfono es requerido cuando se selecciona comunicación por teléfono",
+      );
       setError("Phone number is required when selecting phone communication");
       return;
     }
 
     console.log("Registro");
+    setIsLoading(true);
     try {
       await authClient.signUp.email(
         {
@@ -65,16 +72,19 @@ export default function CredentialsSignUpForm() {
           onError: (ctx) => {
             console.log("Sign up error:", ctx?.error?.message ?? ctx);
             setError(ctx?.error?.message || "Error al registrarse");
+            setIsLoading(false);
           },
           onSuccess: () => {
             console.log("Registro correcto");
-            setError(""); // Limpiar error en éxito
+            setError("");
+            router.push("/sign-in");
           },
         },
       );
     } catch (err) {
       console.error("Error inesperado al registrarse:", err);
       setError("Error inesperado al registrarse");
+      setIsLoading(false);
     }
   }
   return (
@@ -133,12 +143,7 @@ export default function CredentialsSignUpForm() {
         </div>
         {/* términos y condiciones */}
         <div className="flex items-center space-x-2">
-          <input
-            id="agreeToTerms"
-            name="agreeToTerms"
-            type="checkbox"
-            
-          />
+          <input id="agreeToTerms" name="agreeToTerms" type="checkbox" />
           <Label htmlFor="agreeToTerms" className="text-sm">
             I agree to the Terms and conditions
           </Label>
@@ -146,33 +151,49 @@ export default function CredentialsSignUpForm() {
         {/* Método de recibir comunicaciones */}
         <div className="space-y-3">
           <Label>How do you want to receive communications?</Label>
-          <RadioGroup 
-            value={communicationMethod} 
+          <RadioGroup
+            value={communicationMethod}
             onValueChange={setCommunicationMethod}
             className="flex gap-4"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="mail" id="mail" />
-              <Label htmlFor="mail" className="font-normal cursor-pointer">Mail</Label>
+              <Label htmlFor="mail" className="font-normal cursor-pointer">
+                Mail
+              </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="phone" id="phone" />
-              <Label htmlFor="phone" className="font-normal cursor-pointer">Phone</Label>
+              <Label htmlFor="phone" className="font-normal cursor-pointer">
+                Phone
+              </Label>
             </div>
           </RadioGroup>
         </div>
 
         <div>
-          <Button className="w-full" type="submit">
-            Sign Up
+          <Button className="w-full" type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin" />
+                Registrando...
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </Button>
         </div>
 
-        {error && <p className="text-destructive text-sm font-medium">{error}</p>}
-        
+        {error && (
+          <p className="text-destructive text-sm font-medium">{error}</p>
+        )}
+
         <div className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/sign-in" className="underline underline-offset-4 hover:text-primary">
+          <Link
+            href="/sign-in"
+            className="underline underline-offset-4 hover:text-primary"
+          >
             Sign in
           </Link>
         </div>
