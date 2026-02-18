@@ -50,7 +50,7 @@ export default function CredentialsSignUpForm() {
       console.log(
         "El teléfono es requerido cuando se selecciona comunicación por teléfono",
       );
-      setError("Phone number is required when selecting phone communication");
+      setError("El teléfono es requerido cuando se selecciona comunicación por teléfono");
       return;
     }
 
