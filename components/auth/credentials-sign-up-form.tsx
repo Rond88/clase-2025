@@ -2,15 +2,19 @@
 import { Label } from "@radix-ui/react-label";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { signUpDefaultValues } from "@/lib/constantes";
 import { authClient } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
 
 export default function CredentialsSignUpForm() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [communicationMethod, setCommunicationMethod] = useState("");
+  const router = useRouter();
 
   async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
@@ -46,11 +50,16 @@ export default function CredentialsSignUpForm() {
       console.log(
         "El teléfono es requerido cuando se selecciona comunicación por teléfono",
       );
+<<<<<<< HEAD
       setError("Phone number is required when selecting phone communication");
+=======
+      setError("El teléfono es requerido cuando se selecciona comunicación por teléfono");
+>>>>>>> 7d8924fdd296eae9e8266cda313c8336dd8ab52c
       return;
     }
 
     console.log("Registro");
+    setIsLoading(true);
     try {
       await authClient.signUp.email(
         {
@@ -66,6 +75,7 @@ export default function CredentialsSignUpForm() {
           onRequest: () => {},
           onResponse: () => {},
           onError: (ctx) => {
+<<<<<<< HEAD
             console.error("Sign up error context:", ctx);
 
             // Extraer el mensaje de error del servidor
@@ -100,12 +110,23 @@ export default function CredentialsSignUpForm() {
             setError(""); // Limpiar error en éxito
             // Opcional: redirigir al usuario o mostrar mensaje de éxito
             window.location.href = "/sign-in";
+=======
+            console.log("Sign up error:", ctx?.error?.message ?? ctx);
+            setError(ctx?.error?.message || "Error al registrarse");
+            setIsLoading(false);
+          },
+          onSuccess: () => {
+            console.log("Registro correcto");
+            setError("");
+            router.push("/sign-in");
+>>>>>>> 7d8924fdd296eae9e8266cda313c8336dd8ab52c
           },
         },
       );
     } catch (err) {
       console.error("Error inesperado al registrarse:", err);
       setError("Error inesperado al registrarse");
+      setIsLoading(false);
     }
   }
   return (
@@ -193,8 +214,15 @@ export default function CredentialsSignUpForm() {
         </div>
 
         <div>
-          <Button className="w-full" type="submit">
-            Sign Up
+          <Button className="w-full" type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin" />
+                Registrando...
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </Button>
         </div>
 
