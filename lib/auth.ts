@@ -30,6 +30,7 @@ export const auth = betterAuth({
         type: "string",
         required: false,
         input: true,
+        defaultValue: "mail",
       },
     },
   },

@@ -43,7 +43,9 @@ export default function CredentialsSignUpForm() {
 
     // Validación condicional del teléfono según método de comunicación
     if (communicationMethod === "phone" && !phone) {
-      console.log("El teléfono es requerido cuando se selecciona comunicación por teléfono");
+      console.log(
+        "El teléfono es requerido cuando se selecciona comunicación por teléfono",
+      );
       setError("Phone number is required when selecting phone communication");
       return;
     }
@@ -57,18 +59,47 @@ export default function CredentialsSignUpForm() {
           name,
           // enviar phone si viene (es optional en el auth)
           ...(phone ? { phone } : {}),
-          comms: communicationMethod || undefined,
+          // NOTA: comms se omite temporalmente porque Better Auth no lo acepta en signUp
+          // Se puede actualizar después del registro si es necesario
         },
         {
           onRequest: () => {},
           onResponse: () => {},
           onError: (ctx) => {
-            console.log("Sign up error:", ctx?.error?.message ?? ctx);
-            setError(ctx?.error?.message || "Error al registrarse");
+            console.error("Sign up error context:", ctx);
+
+            // Extraer el mensaje de error del servidor
+            const errorMessage = ctx?.error?.message || "";
+            const errorStatus = ctx?.error?.status;
+
+            // Log completo para debugging
+            console.error("Error status:", errorStatus);
+            console.error("Error message:", errorMessage);
+            console.error("Full error object:", ctx?.error);
+
+            // Detectar error de email duplicado específicamente
+            if (
+              errorMessage.toLowerCase().includes("already") ||
+              errorMessage.toLowerCase().includes("duplicate") ||
+              errorMessage.toLowerCase().includes("exists")
+            ) {
+              setError(
+                "Este email ya está registrado. Por favor, usa otro email o inicia sesión.",
+              );
+            } else if (errorMessage) {
+              // Mostrar el mensaje exacto del servidor
+              setError(errorMessage);
+            } else {
+              setError(
+                `Error al registrarse (código ${errorStatus || "desconocido"}). Por favor, revisa la consola para más detalles.`,
+              );
+            }
           },
           onSuccess: () => {
             console.log("Registro correcto");
             setError(""); // Limpiar error en éxito
+            // Opcional: redirigir al usuario o mostrar mensaje de éxito
+            window.location.href = "/sign-in";
           },
         },
       );
@@ -133,12 +164,7 @@ export default function CredentialsSignUpForm() {
         </div>
         {/* términos y condiciones */}
         <div className="flex items-center space-x-2">
-          <input
-            id="agreeToTerms"
-            name="agreeToTerms"
-            type="checkbox"
-            
-          />
+          <input id="agreeToTerms" name="agreeToTerms" type="checkbox" />
           <Label htmlFor="agreeToTerms" className="text-sm">
             I agree to the Terms and conditions
           </Label>
@@ -146,18 +172,22 @@ export default function CredentialsSignUpForm() {
         {/* Método de recibir comunicaciones */}
         <div className="space-y-3">
           <Label>How do you want to receive communications?</Label>
-          <RadioGroup 
-            value={communicationMethod} 
+          <RadioGroup
+            value={communicationMethod}
             onValueChange={setCommunicationMethod}
             className="flex gap-4"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="mail" id="mail" />
-              <Label htmlFor="mail" className="font-normal cursor-pointer">Mail</Label>
+              <Label htmlFor="mail" className="font-normal cursor-pointer">
+                Mail
+              </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="phone" id="phone" />
-              <Label htmlFor="phone" className="font-normal cursor-pointer">Phone</Label>
+              <Label htmlFor="phone" className="font-normal cursor-pointer">
+                Phone
+              </Label>
             </div>
           </RadioGroup>
         </div>
@@ -168,11 +198,16 @@ export default function CredentialsSignUpForm() {
           </Button>
         </div>
 
-        {error && <p className="text-destructive text-sm font-medium">{error}</p>}
-        
+        {error && (
+          <p className="text-destructive text-sm font-medium">{error}</p>
+        )}
+
         <div className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/sign-in" className="underline underline-offset-4 hover:text-primary">
+          <Link
+            href="/sign-in"
+            className="underline underline-offset-4 hover:text-primary"
+          >
             Sign in
           </Link>
         </div>
