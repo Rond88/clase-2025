@@ -50,11 +50,7 @@ export default function CredentialsSignUpForm() {
       console.log(
         "El teléfono es requerido cuando se selecciona comunicación por teléfono",
       );
-<<<<<<< HEAD
       setError("Phone number is required when selecting phone communication");
-=======
-      setError("El teléfono es requerido cuando se selecciona comunicación por teléfono");
->>>>>>> 7d8924fdd296eae9e8266cda313c8336dd8ab52c
       return;
     }
 
@@ -75,7 +71,6 @@ export default function CredentialsSignUpForm() {
           onRequest: () => {},
           onResponse: () => {},
           onError: (ctx) => {
-<<<<<<< HEAD
             console.error("Sign up error context:", ctx);
 
             // Extraer el mensaje de error del servidor
@@ -110,16 +105,6 @@ export default function CredentialsSignUpForm() {
             setError(""); // Limpiar error en éxito
             // Opcional: redirigir al usuario o mostrar mensaje de éxito
             window.location.href = "/sign-in";
-=======
-            console.log("Sign up error:", ctx?.error?.message ?? ctx);
-            setError(ctx?.error?.message || "Error al registrarse");
-            setIsLoading(false);
-          },
-          onSuccess: () => {
-            console.log("Registro correcto");
-            setError("");
-            router.push("/sign-in");
->>>>>>> 7d8924fdd296eae9e8266cda313c8336dd8ab52c
           },
         },
       );
